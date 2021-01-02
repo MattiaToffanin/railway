@@ -2,8 +2,14 @@
 // Created by Mattia Toffanin on 29/12/20.
 //
 
+/*
+ * !!!!!!IMPORTANTE!!!!!!
+ * Stavo pensando che si potrebbe usare un intero dentro il treno per individuare la posizione in cui si trova,
+ * visto che stop_train di Station restituisce un intero e leave_train riceve un intero.
+ */
 #include "Station.h"
 
+using namespace std;
 
 int Main_station::get_free_binary(Train *t) {
     if (t->getToward()) {
@@ -24,10 +30,10 @@ int Main_station::get_free_binary(Train *t) {
 int Main_station::stop_train(Train *t) {
     switch (get_free_binary(t)) {
         case -2:
-            parcking2.push_back(t);
+            parcking2_stop.push_back(t);
             break;
         case -1:
-            parcking1.push_back(t);
+            parcking1_stop.push_back(t);
             break;
         case 0:
             standard_track[0] = t;
@@ -52,14 +58,85 @@ Train *Main_station::leave_train(int track) {
     Train *ret = standard_track[track];
     standard_track[track] = nullptr;
 
-    if (track < 2)
-        if (!parcking1.empty()) {
-            stop_train(parcking1.front());
-            parcking1.pop_front();
-        } else if (!parcking2.empty()) {
-            stop_train(parcking2.front());
-            parcking2.pop_front();
+    if (track < 2) {
+        if (!parcking1_stop.empty()) {
+            stop_train(parcking1_stop.front());
+            parcking1_stop.pop_front();
+        } else if (!parcking2_stop.empty()) {
+            stop_train(parcking2_stop.front());
+            parcking2_stop.pop_front();
         }
-
+    }
     return ret;
 }
+
+void Main_station::print() {
+    cout << "type: " << get_type() << ", name: " << get_name() << ", id: " << get_id() << endl << "standard tracks: "
+         << endl;
+    for (Train *t: standard_track)
+        if (t)
+            t->print();
+        else
+            cout << "nullptr" << endl;
+    cout << "stop parking: " << endl;
+    for (Train *t: parcking1_stop)
+        t->print();
+    for (Train *t: parcking2_stop)
+        t->print();
+}
+
+
+void Local_station::print() {
+    Main_station::print();
+    cout << "transit track: " << endl;
+    for (Train *t: transit_track)
+        if (t)
+            t->print();
+        else
+            cout << "nullptr" << endl;
+    cout << "transit parking: " << endl;
+    for (Train *t: parcking1_transit)
+        t->print();
+    for (Train *t: parcking2_transit)
+        t->print();
+
+}
+
+int Local_station::get_free_binary(Train *t) {
+    if (t->getType() == "REGIONALE")
+        return Main_station::get_free_binary(t);
+
+    if (t->getToward()) {
+        if (!transit_track[0])
+            return 4;
+        return -4;
+    } else {
+        if (!transit_track[1])
+            return 5;
+        return -5;
+    }
+}
+
+int Local_station::stop_train(Train *t) {
+    if (t->getType() == "REGIONALE")
+        return Main_station::stop_train(t);
+
+    switch (get_free_binary(t)) {
+        case -5:
+            parcking2_transit.push_back(t);
+            break;
+        case -4:
+            parcking1_transit.push_back(t);
+            break;
+        case 4:
+            transit_track[0] = t;
+            break;
+        case 5:
+            transit_track[1] = t;
+            break;
+    }
+    return get_free_binary(t);
+}
+
+
+

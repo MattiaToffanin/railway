@@ -5,14 +5,15 @@ using namespace std;
 
 
 int main() {
-    Main_station s = Main_station("Roma", 1234);
+    Local_station s("Roma", 1234);
     s.print();
-    Train t1(1, true, "VELOCE", 0);
+    cout << endl;
+    Train t1(1, true, "SUPER VELOCE", 0);
     Train t2(2, true, "VELOCE", 0);
     Train t3(3, true, "VELOCE", 0);
-    Train t4(4, false, "VELOCE", 0);
-    Train t5(5, false, "VELOCE", 0);
-    Train t6(6, false, "VELOCE", 0);
+    Train t4(4, true, "REGIONALE", 0);
+    Train t5(5, true, "REGIONALE", 0);
+    Train t6(6, true, "REGIONALE", 0);
 
 
     s.stop_train(&t1);
@@ -21,11 +22,27 @@ int main() {
     s.stop_train(&t4);
     s.stop_train(&t5);
     s.stop_train(&t6);
+
     s.print();
+
+
+
+
+
+    /*
+
+    s.print();
+    cout << endl;
 
     s.leave_train(1);
     s.print();
+    cout << endl;
     s.leave_train(1);
     s.print();
+    cout << endl;*/
+
+
+
+
     return 0;
 }

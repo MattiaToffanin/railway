@@ -24,6 +24,10 @@ public:
 
     int getId() const { return ID; }
 
+    void print() {
+        std::cout << "ID: " << getId() << ", type: " << getType() << ", toward: " << getToward() << std::endl;
+    }
+
 private:
     int ID;
     bool toward; //true andata, false ritorno
@@ -34,18 +38,17 @@ private:
 
 class Station {
 public:
-
-    virtual int
-    get_free_binary(Train *t) = 0; //Restituisce il binario vuoto dove ci si può fermare (!!!Non usare se non necessario!!!)
-
     virtual int stop_train(Train *t) = 0; //Ferma il treno nel binario libero
 
     virtual Train *leave_train(int track) = 0; //Fa ripartire il treno dal binario inserito
 
+    virtual void print() = 0;
 
     const std::string &get_name() const { return name; };
 
     int get_id() const { return ID; }
+
+    std::string get_type() { return typeid(*this).name(); };
 
     Station(const Station &) = delete;
 
@@ -56,6 +59,7 @@ public:
 protected:
     explicit Station(const std::string &name, int id) : name{name}, ID{id} {}
 
+    virtual int get_free_binary(Train *t) = 0; //Restituisce il binario vuoto dove ci si può fermare
 
 private:
     std::string name;
@@ -67,8 +71,6 @@ class Main_station : public Station {
 public:
     explicit Main_station(const std::string &name, int id) : Station(name, id), standard_track{} {}
 
-    int get_free_binary(Train *t) override;
-
     int stop_train(Train *t) override;
 
     Train *leave_train(int track) override;
@@ -76,32 +78,42 @@ public:
     /*
      * Classe di testing
      */
-    void print() {
-        std::cout << "name: " << get_name() << ", id: " << get_id() << std::endl << "tracks: " << std::endl;
-        for (Train *t: standard_track)
-            if (t)
-                std::cout << t->getId() << ", " << t->getType() << ", "
-                          << t->getToward() << std::endl;
-            else
-                std::cout << "nullptr" << std::endl;
-        std::cout << "parking: " << std::endl;
-        for (Train *t: parcking1)
-            std::cout << t->getId() << ", " << t->getType() << ", " << t->getToward() << std::endl;
-        for (Train *t: parcking2)
-            std::cout << t->getId() << ", " << t->getType() << ", " << t->getToward() << std::endl;
-    }
+    void print() override;
+
+    static const std::string TYPE;
+protected:
+    int get_free_binary(Train *t) override;
 
 
 private:
-    static const int standard_track_length = 4;
-    Train *standard_track[standard_track_length]; //Binari 0,1: treni andata, Binari 2,3: treni ritorno
-    std::deque<Train *> parcking1;
-    std::deque<Train *> parcking2;
+    static const int STANDARD_TRACK_LENGTH = 4;
+    Train *standard_track[STANDARD_TRACK_LENGTH]; //Binari 0,1: treni andata, Binari 2,3: treni ritorno
+    std::deque<Train *> parcking1_stop;
+    std::deque<Train *> parcking2_stop;
 };
 
 
-class Local_station : public Station {
+class Local_station : public Main_station {
 public:
+    explicit Local_station(const std::string &name, int id) : Main_station(name, id), transit_track{} {}
+
+    int stop_train(Train *t) override;
+
+    //Train *leave_train(int track) override;
+
+    /*
+     * Classe di testing
+     */
+    void print() override;
+
+private:
+    static const int transit_track_length = 2;
+    Train *transit_track[transit_track_length]; //Binari 0,1: treni andata, Binari 2,3: treni ritorno
+
+    int get_free_binary(Train *t) override;
+
+    std::deque<Train *> parcking1_transit;
+    std::deque<Train *> parcking2_transit;
 };
 
 
