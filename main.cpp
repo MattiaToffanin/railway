@@ -8,11 +8,11 @@ int main() {
     Local_station s("Roma", 1234);
     s.print();
     cout << endl;
-    Train t1(1, true, "SUPER VELOCE", 0);
+    Train t1(1, true, "VELOCE", 0);
     Train t2(2, true, "VELOCE", 0);
-    Train t3(3, true, "VELOCE", 0);
+    Train t3(3, true, "REGIONALE", 0);
     Train t4(4, true, "REGIONALE", 0);
-    Train t5(5, true, "REGIONALE", 0);
+    Train t5(5, true, "VELOCE", 0);
     Train t6(6, true, "REGIONALE", 0);
 
 
@@ -25,9 +25,15 @@ int main() {
 
     s.print();
 
+    s.leave_train(1);
 
+    s.leave_train(4);
+    s.leave_train(4);
+    s.leave_train(4);
 
+    cout << endl;
 
+    s.print();
 
     /*
 

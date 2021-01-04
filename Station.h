@@ -76,7 +76,7 @@ public:
     Train *leave_train(int track) override;
 
     /*
-     * Classe di testing
+     * Funzione di testing
      */
     void print() override;
 
@@ -99,10 +99,10 @@ public:
 
     int stop_train(Train *t) override;
 
-    //Train *leave_train(int track) override;
+    Train *leave_train(int track) override;
 
     /*
-     * Classe di testing
+     * Funzione di testing
      */
     void print() override;
 

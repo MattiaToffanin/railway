@@ -62,7 +62,9 @@ Train *Main_station::leave_train(int track) {
         if (!parcking1_stop.empty()) {
             stop_train(parcking1_stop.front());
             parcking1_stop.pop_front();
-        } else if (!parcking2_stop.empty()) {
+        }
+    } else {
+        if (!parcking2_stop.empty()) {
             stop_train(parcking2_stop.front());
             parcking2_stop.pop_front();
         }
@@ -78,9 +80,10 @@ void Main_station::print() {
             t->print();
         else
             cout << "nullptr" << endl;
-    cout << "stop parking: " << endl;
+    cout << "stop parking: ->" << endl;
     for (Train *t: parcking1_stop)
         t->print();
+    cout << "stop parking: <-" << endl;
     for (Train *t: parcking2_stop)
         t->print();
 }
@@ -94,9 +97,10 @@ void Local_station::print() {
             t->print();
         else
             cout << "nullptr" << endl;
-    cout << "transit parking: " << endl;
+    cout << "transit parking: ->" << endl;
     for (Train *t: parcking1_transit)
         t->print();
+    cout << "transit parking: <-" << endl;
     for (Train *t: parcking2_transit)
         t->print();
 
@@ -136,6 +140,37 @@ int Local_station::stop_train(Train *t) {
             break;
     }
     return get_free_binary(t);
+}
+
+Train *Local_station::leave_train(int track) {
+    if (track < 0 || track > 5)
+        throw;
+
+    if (track <= 3)
+        return Main_station::leave_train(track);
+
+    Train *ret;
+
+    if (track == 4) {
+        if (!transit_track[0])
+            throw;
+        ret = transit_track[0];
+        transit_track[0] = nullptr;
+        if (!parcking1_transit.empty()) {
+            stop_train(parcking1_transit.front());
+            parcking1_transit.pop_front();
+        }
+    } else if (track == 5) { //Inutile ma va bene così
+        if (!transit_track[1])
+            throw;
+        ret = transit_track[1];
+        transit_track[1] = nullptr;
+        if (!parcking2_transit.empty()) {
+            stop_train(parcking2_transit.front());
+            parcking2_transit.pop_front();
+        }
+    }
+    return ret;
 }
 
 
