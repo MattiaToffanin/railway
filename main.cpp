@@ -10,7 +10,7 @@ int main() {
     s.print();
     cout << endl;
 
-    RegionalTrain t1{123};
+    RegionalTrain t1{123, false};
     t1.print();
 
     /*

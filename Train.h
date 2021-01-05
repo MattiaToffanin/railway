@@ -5,7 +5,6 @@
 #define RAILWAY_TRAIN_H
 
 
-
 class Train {
 private:
     int ID;
@@ -28,8 +27,7 @@ private:
     static const int LIMIT_SPEED = 80;
 
 protected:
-    explicit Train(int ID = 0, int speed = 0, int delay = 0, int firstStation = 0, int status = 0,
-                   bool toward = true)
+    explicit Train(int ID = 0, bool toward = true, int speed = 0, int delay = 0, int firstStation = 0, int status = 0)
             : ID{ID}, speed{speed}, delay{delay}, nextStation{firstStation}, status{status}, toward{toward} {}
 
 protected:
@@ -69,9 +67,9 @@ public:
 
 class RegionalTrain : public Train {
 public:
-    explicit RegionalTrain(int ID = 0, int speed = 0, int delay = 0, int firstStation = 0, int status = 0,
-                           bool toward = true)
-            : Train(ID, speed, delay, firstStation, status, toward) {};
+    explicit RegionalTrain(int ID = 0, bool toward = true, int speed = 0, int delay = 0, int firstStation = 0,
+                           int status = 0)
+            : Train(ID, toward, speed, delay, firstStation, status) {};
 
 private:
     static const int MAX_SPEED = 160;
@@ -79,18 +77,20 @@ private:
 
 class HighSpeedTrain : public Train {
 public:
-    explicit HighSpeedTrain(int ID = 0, int speed = 0, int delay = 0, int firstStation = 0, int status = 0,
-                            bool toward = true)
-            : Train(ID, speed, delay, firstStation, status, toward) {};
+    explicit HighSpeedTrain(int ID = 0, bool toward = true, int speed = 0, int delay = 0, int firstStation = 0,
+                            int status = 0)
+            : Train(ID, toward, speed, delay, firstStation, status) {};
+
 private:
     static const int MAX_SPEED = 240;
 };
 
 class SuperHighSpeedTrain : public Train {
 public:
-    explicit SuperHighSpeedTrain(int ID = 0, int speed = 0, int delay = 0, int firstStation = 0,
-                                 int status = 0, bool toward = true)
-            : Train(ID, speed, delay, firstStation, status, toward) {};
+    explicit SuperHighSpeedTrain(int ID = 0, bool toward = true, int speed = 0, int delay = 0, int firstStation = 0,
+                                 int status = 0)
+            : Train(ID, toward, speed, delay, firstStation, status) {};
+
 private:
     static const int MAX_SPEED = 300;
 };
