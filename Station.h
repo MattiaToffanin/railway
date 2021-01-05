@@ -1,40 +1,18 @@
 //
 // Created by Mattia Toffanin on 29/12/20.
 //
+#ifndef RAILWAY_STATION_H
+#define RAILWAY_STATION_H
 #include <string>
 #include <iostream>
 #include <deque>
+#include "Train.h"
 
-
-#ifndef RAILWAY_STATION_H
-#define RAILWAY_STATION_H
+class Train;
 
 /**
  * Classe provvisoria di Train solo per debug
  */
-class Train {
-public:
-    Train() {}
-
-    Train(int id, bool toward, const std::string &type, int delay) : ID{id}, toward{toward}, type{type}, delay{delay} {}
-
-    const bool &getToward() const { return toward; }
-
-    const std::string &getType() const { return type; }
-
-    int getId() const { return ID; }
-
-    void print() {
-        std::cout << "ID: " << getId() << ", type: " << getType() << ", toward: " << getToward() << std::endl;
-    }
-
-private:
-    int ID;
-    bool toward; //true andata, false ritorno
-    std::string type;
-    int delay;
-};
-
 
 class Station {
 public:
@@ -54,7 +32,7 @@ public:
 
     Station &operator=(const Station &) = delete;
 
-    virtual ~Station() {}
+    virtual ~Station() = default;
 
 protected:
     explicit Station(const std::string &name, int id) : name{name}, ID{id} {}

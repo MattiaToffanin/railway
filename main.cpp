@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Train.h"
 #include "Station.h"
 
 using namespace std;
@@ -8,13 +9,11 @@ int main() {
     Local_station s("Roma", 1234);
     s.print();
     cout << endl;
-    Train t1(1, true, "VELOCE", 0);
-    Train t2(2, true, "VELOCE", 0);
-    Train t3(3, true, "REGIONALE", 0);
-    Train t4(4, true, "REGIONALE", 0);
-    Train t5(5, true, "VELOCE", 0);
-    Train t6(6, true, "REGIONALE", 0);
 
+    RegionalTrain t1{123};
+    t1.print();
+
+    /*
 
     s.stop_train(&t1);
     s.stop_train(&t2);
@@ -35,17 +34,7 @@ int main() {
 
     s.print();
 
-    /*
-
-    s.print();
-    cout << endl;
-
-    s.leave_train(1);
-    s.print();
-    cout << endl;
-    s.leave_train(1);
-    s.print();
-    cout << endl;*/
+   */
 
 
 
