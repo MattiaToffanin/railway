@@ -10,10 +10,12 @@ int main() {
     s.print();
     cout << endl;
 
-    RegionalTrain t1{123, false};
-    t1.print();
-
-    /*
+    RegionalTrain t1{1, true};
+    RegionalTrain t2{2, true};
+    RegionalTrain t3{3, true};
+    HighSpeedTrain t4{4, true};
+    HighSpeedTrain t5{5, true};
+    HighSpeedTrain t6{6, true};
 
     s.stop_train(&t1);
     s.stop_train(&t2);
@@ -23,18 +25,14 @@ int main() {
     s.stop_train(&t6);
 
     s.print();
-
-    s.leave_train(1);
-
-    s.leave_train(4);
-    s.leave_train(4);
-    s.leave_train(4);
-
     cout << endl;
+
+    s.leave_train(0);
+    s.leave_train(4);
 
     s.print();
 
-   */
+
 
 
 

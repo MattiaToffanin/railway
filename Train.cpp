@@ -45,7 +45,7 @@ bool Train::getToward() const {
 
 void Train::print() const {
     std::cout << "ID: " << ID << " speed: " << speed << " delay: " << delay << " toward: " << toward
-       << " status: " << status << " nextStation: " << nextStation;
+       << " status: " << status << " nextStation: " << nextStation << std::endl;
 }
 
 

@@ -107,7 +107,7 @@ void Local_station::print() {
 }
 
 int Local_station::get_free_binary(Train *t) {
-    if (t->getType() == "REGIONALE")
+    if (t->getType() == "13RegionalTrain")
         return Main_station::get_free_binary(t);
 
     if (t->getToward()) {
@@ -122,7 +122,7 @@ int Local_station::get_free_binary(Train *t) {
 }
 
 int Local_station::stop_train(Train *t) {
-    if (t->getType() == "REGIONALE")
+    if (t->getType() == "13RegionalTrain")
         return Main_station::stop_train(t);
 
     switch (get_free_binary(t)) {
@@ -149,7 +149,7 @@ Train *Local_station::leave_train(int track) {
     if (track <= 3)
         return Main_station::leave_train(track);
 
-    Train *ret;
+    Train *ret = nullptr;
 
     if (track == 4) {
         if (!transit_track[0])
