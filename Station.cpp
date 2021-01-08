@@ -11,6 +11,7 @@ Station::~Station() {
     ID = 0;
 }
 
+
 int Main_station::get_free_binary(Train *t) {
     if (t->getToward()) { //Controllo il verso del treno
         if (!standard_track[0])
@@ -72,7 +73,7 @@ Train *Main_station::leave_train(int track) {
 }
 
 void Main_station::print() const {
-    cout << "type: " << get_type() << ", name: " << get_name() << ", id: " << get_id() << endl << "standard tracks: "
+    cout << "type: " << get_type() << ", name: " << get_name() << ", id: " << get_id() << ", distance: " << get_distance() << endl << "standard tracks: "
          << endl;
     for (Train *t: standard_track)
         if (t)

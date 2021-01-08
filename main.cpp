@@ -6,7 +6,7 @@ using namespace std;
 
 
 int main() {
-    Local_station s("Roma", 1234);
+    Local_station s("Roma", 1234, 2);
     s.print();
     cout << endl;
 

@@ -44,6 +44,12 @@ public:
     int get_id() const { return ID; }
 
     /**
+     * Getter di distance
+     * @return la distanza dall'origine
+     */
+    int get_distance() const { return distance; }
+
+    /**
      * Funzione membro che restituisce il tipo di stazione
      * @return "13Local_station" se stazione locale, "12Main_station" se stazione principale
      */
@@ -70,8 +76,9 @@ protected:
      * Costruttore parametrico
      * @param name, il nome della stazione
      * @param id, l'identificativo della stazione
+     * @param distance, la distanza dall'origine
      */
-    explicit Station(const std::string &name, int id) : name{name}, ID{id} {}
+    explicit Station(const std::string &name, int id, int distance) : name{name}, ID{id}, distance{distance} {}
 
     /**
      * Funzione membro che controlla se fermare o far transitare il treno nel binario libero se libero, altrimenti se parcheggiarlo
@@ -83,6 +90,7 @@ protected:
 private:
     std::string name; //Nome della stazione
     int ID; //Identificativo della stazione
+    int distance; //Distanza dall'origine
 };
 
 
@@ -92,8 +100,10 @@ public:
      * Costruttore parametrico
      * @param name, il nome della stazione
      * @param id, l'identificativo della stazione
+     * @param distance, la distanza dall'origine
      */
-    explicit Main_station(const std::string &name, int id) : Station(name, id), standard_track{} {}
+    explicit Main_station(const std::string &name, int id, int distance) : Station(name, id, distance),
+                                                                           standard_track{} {}
 
     /**
      * Funzione membro che ferma o fa transitare il treno nel binario libero se libero, altrimenti lo parcheggia
@@ -141,8 +151,10 @@ public:
      * Costruttore parametrico
      * @param name, il nome della stazione
      * @param id, l'identificativo della stazione
+     * @param distance, la distanza dall'origine
      */
-    explicit Local_station(const std::string &name, int id) : Main_station(name, id), transit_track{} {}
+    explicit Local_station(const std::string &name, int id, int distance) : Main_station(name, id, distance),
+                                                                            transit_track{} {}
 
     /**
      * Funzione membro che ferma il treno nel binario libero
