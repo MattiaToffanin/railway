@@ -3,95 +3,183 @@
 //
 #ifndef RAILWAY_STATION_H
 #define RAILWAY_STATION_H
+
 #include <string>
 #include <iostream>
 #include <deque>
 #include "Train.h"
 
-class Train;
-
-/**
- * Classe provvisoria di Train solo per debug
- */
 
 class Station {
 public:
-    virtual int stop_train(Train *t) = 0; //Ferma il treno nel binario libero
+    /**
+     * Funzione membro che ferma o fa transitare il treno nel binario libero se libero, altrimenti lo parcheggia
+     * @param t, il treno da fermare
+     * @return intero che indica il binario di stop/transito o il parcheggio (vedi status di train)
+     */
+    virtual int stop_train(Train *t) = 0;
 
-    virtual Train *leave_train(int track) = 0; //Fa ripartire il treno dal binario inserito
+    /**
+     * Funzione membro che fa ripartire il treno dal binario inserito
+     * @param track, il binario da liberare
+     * @return train che è partito
+     */
+    virtual Train *leave_train(int track) = 0;
 
-    virtual void print() = 0;
+    /**
+     * Funzione membro che stampa la situazione della stazione
+     */
+    virtual void print() const = 0;
 
+    /**
+     * Getter di name
+     * @return il nome della stazione
+     */
     const std::string &get_name() const { return name; };
 
+    /**
+     * Getter di ID
+     * @return l'identificativo della stazione
+     */
     int get_id() const { return ID; }
 
-    std::string get_type() { return typeid(*this).name(); };
+    /**
+     * Funzione membro che restituisce il tipo di stazione
+     * @return "13Local_station" se stazione locale, "12Main_station" se stazione principale
+     */
+    std::string get_type() const { return typeid(*this).name(); };
 
+    /**
+     * Costruttore di copia disabilitato
+     */
     Station(const Station &) = delete;
 
+    /**
+     * Assegnamento di copia disabilitato
+     * @return
+     */
     Station &operator=(const Station &) = delete;
 
-    virtual ~Station() = default;
+    /**
+     * Distruttore
+     */
+    virtual ~Station();
 
 protected:
+    /**
+     * Costruttore parametrico
+     * @param name, il nome della stazione
+     * @param id, l'identificativo della stazione
+     */
     explicit Station(const std::string &name, int id) : name{name}, ID{id} {}
 
-    virtual int get_free_binary(Train *t) = 0; //Restituisce il binario vuoto dove ci si può fermare
+    /**
+     * Funzione membro che controlla se fermare o far transitare il treno nel binario libero se libero, altrimenti se parcheggiarlo
+     * @param t il treno da fermare
+     * @return intero che indica il binario di stop/transito o il parcheggio (vedi status di train)
+     */
+    virtual int get_free_binary(Train *t) = 0;
 
 private:
-    std::string name;
-    int ID;
+    std::string name; //Nome della stazione
+    int ID; //Identificativo della stazione
 };
 
 
 class Main_station : public Station {
 public:
+    /**
+     * Costruttore parametrico
+     * @param name, il nome della stazione
+     * @param id, l'identificativo della stazione
+     */
     explicit Main_station(const std::string &name, int id) : Station(name, id), standard_track{} {}
 
+    /**
+     * Funzione membro che ferma o fa transitare il treno nel binario libero se libero, altrimenti lo parcheggia
+     * @param t, il treno da fermare
+     * @return intero che indica il binario di stop/transito o il parcheggio (vedi status di train)
+     */
     int stop_train(Train *t) override;
 
+    /**
+     * Funzione membro che fa ripartire il treno dal binario inserito
+     * @param track, il binario da liberare
+     * @return train che è partito
+     * */
     Train *leave_train(int track) override;
 
-    /*
-     * Funzione di testing
+    /**
+     * Funzione membro che stampa la situazione della stazione
      */
-    void print() override;
+    void print() const override;
 
-    static const std::string TYPE;
+    /**
+     * Distruttore
+     */
+    ~Main_station() override;
+
 protected:
+    /**
+     * Funzione membro che controlla se fermare o far transitare il treno nel binario libero se libero, altrimenti se parcheggiarlo
+     * @param t il treno da fermare
+     * @return intero che indica il binario di stop/transito o il parcheggio (vedi status di train)
+     */
     int get_free_binary(Train *t) override;
 
-
 private:
-    static const int STANDARD_TRACK_LENGTH = 4;
+    static const int STANDARD_TRACK_LENGTH = 4; //Lunghezza dell'array per i binari standard
     Train *standard_track[STANDARD_TRACK_LENGTH]; //Binari 0,1: treni andata, Binari 2,3: treni ritorno
-    std::deque<Train *> parcking1_stop;
-    std::deque<Train *> parcking2_stop;
+    std::deque<Train *> parcking1_stop; //Coda per parcheggio di stop di andata
+    std::deque<Train *> parcking2_stop; //Coda per parcheggio di stop di ritorno
 };
 
 
 class Local_station : public Main_station {
 public:
+    /**
+     * Costruttore parametrico
+     * @param name, il nome della stazione
+     * @param id, l'identificativo della stazione
+     */
     explicit Local_station(const std::string &name, int id) : Main_station(name, id), transit_track{} {}
 
+    /**
+     * Funzione membro che ferma il treno nel binario libero
+     * @param t, il treno da fermare
+     * @return intero che indica il binario di stop/transito o il parcheggio (vedi status di train)
+     */
     int stop_train(Train *t) override;
 
+    /**
+     * Funzione membro che fa ripartire il treno dal binario inserito
+     * @param track, il binario da liberare
+     * @return train che è partito
+     */
     Train *leave_train(int track) override;
 
-    /*
-     * Funzione di testing
+    /**
+     * Funzione membro che stampa la situazione della stazione
      */
-    void print() override;
+    void print() const override;
+
+    /**
+     * Distruttore
+     */
+    ~Local_station() override;
 
 private:
-    static const int transit_track_length = 2;
-    Train *transit_track[transit_track_length]; //Binari 0,1: treni andata, Binari 2,3: treni ritorno
+    static const int TRANSIT_TRACK_LENGTH = 2; //Lunghezza dell'array per i binari di transito
+    Train *transit_track[TRANSIT_TRACK_LENGTH]; //Binario 0: treni andata, Binario 1: treni ritorno
+    std::deque<Train *> parcking1_transit; //Coda per parcheggio di transito di andata
+    std::deque<Train *> parcking2_transit; //Coda per parcheggio di transito di ritorno
 
+    /**
+     * Funzione membro che controlla se fermare o far transitare il treno nel binario libero se libero, altrimenti se parcheggiarlo
+     * @param t il treno da fermare
+     * @return intero che indica il binario di stop/transito o il parcheggio (vedi status di train)
+     */
     int get_free_binary(Train *t) override;
-
-    std::deque<Train *> parcking1_transit;
-    std::deque<Train *> parcking2_transit;
 };
 
 

@@ -2,17 +2,17 @@
 // Created by Mattia Toffanin on 29/12/20.
 //
 
-/*
- * !!!!!!IMPORTANTE!!!!!!
- * Stavo pensando che si potrebbe usare un intero dentro il treno per individuare la posizione in cui si trova,
- * visto che stop_train di Station restituisce un intero e leave_train riceve un intero.
- */
 #include "Station.h"
 
 using namespace std;
 
+Station::~Station() {
+    name.clear();
+    ID = 0;
+}
+
 int Main_station::get_free_binary(Train *t) {
-    if (t->getToward()) {
+    if (t->getToward()) { //Controllo il verso del treno
         if (!standard_track[0])
             return 0;
         if (!standard_track[1])
@@ -52,15 +52,14 @@ int Main_station::stop_train(Train *t) {
 }
 
 Train *Main_station::leave_train(int track) {
-    if (!standard_track[track] || track < 0 || track > 3)
+    if (!standard_track[track] || track < 0 || track > 3) //Controllo se binario è pieno o se è compreso tra 0 e 3
         throw;
 
     Train *ret = standard_track[track];
-    standard_track[track] = nullptr;
-
-    if (track < 2) {
-        if (!parcking1_stop.empty()) {
-            stop_train(parcking1_stop.front());
+    standard_track[track] = nullptr; //Svuoto il binatio
+    if (track < 2) { //Controllo se binario andata o ritorno
+        if (!parcking1_stop.empty()) { //Controllo se parcheggio vuoto
+            stop_train(parcking1_stop.front()); //Fermo un treno in parcheggio
             parcking1_stop.pop_front();
         }
     } else {
@@ -72,7 +71,7 @@ Train *Main_station::leave_train(int track) {
     return ret;
 }
 
-void Main_station::print() {
+void Main_station::print() const {
     cout << "type: " << get_type() << ", name: " << get_name() << ", id: " << get_id() << endl << "standard tracks: "
          << endl;
     for (Train *t: standard_track)
@@ -88,29 +87,19 @@ void Main_station::print() {
         t->print();
 }
 
-
-void Local_station::print() {
-    Main_station::print();
-    cout << "transit track: " << endl;
-    for (Train *t: transit_track)
-        if (t)
-            t->print();
-        else
-            cout << "nullptr" << endl;
-    cout << "transit parking: ->" << endl;
-    for (Train *t: parcking1_transit)
-        t->print();
-    cout << "transit parking: <-" << endl;
-    for (Train *t: parcking2_transit)
-        t->print();
-
+Main_station::~Main_station() {
+    for (int i = 0; i < STANDARD_TRACK_LENGTH; ++i)
+        standard_track[i] = nullptr; //Non distruggo i puntatori di Train perchè può essere che servano a qualcun altro
+    parcking1_stop.clear(); //Clear pulisce solo la coda ma non distrugge i puntatori all'interno
+    parcking2_stop.clear();
 }
 
-int Local_station::get_free_binary(Train *t) {
-    if (t->getType() == "13RegionalTrain")
-        return Main_station::get_free_binary(t);
 
-    if (t->getToward()) {
+int Local_station::get_free_binary(Train *t) {
+    if (t->getType() == "13RegionalTrain") //Controllo il tipo di treno
+        return Main_station::get_free_binary(t); //Se regionale allora è come se fosse una stazione principale
+
+    if (t->getToward()) { //Se non regionale controlla il verso
         if (!transit_track[0])
             return 4;
         return -4;
@@ -122,8 +111,8 @@ int Local_station::get_free_binary(Train *t) {
 }
 
 int Local_station::stop_train(Train *t) {
-    if (t->getType() == "13RegionalTrain")
-        return Main_station::stop_train(t);
+    if (t->getType() == "13RegionalTrain") //Controllo il tipo di treno
+        return Main_station::stop_train(t); //Se regionale allora è come se fosse una stazione principale
 
     switch (get_free_binary(t)) {
         case -5:
@@ -143,14 +132,13 @@ int Local_station::stop_train(Train *t) {
 }
 
 Train *Local_station::leave_train(int track) {
-    if (track < 0 || track > 5)
+    if (track < 0 || track > 5) //Controllo se binario è compreso tra 0 e 3
         throw;
 
-    if (track <= 3)
-        return Main_station::leave_train(track);
+    if (track <= 3) //Controllo il tipo di binario
+        return Main_station::leave_train(track); //Se standard è come se fosse una stazione principale
 
     Train *ret = nullptr;
-
     if (track == 4) {
         if (!transit_track[0])
             throw;
@@ -173,5 +161,25 @@ Train *Local_station::leave_train(int track) {
     return ret;
 }
 
+void Local_station::print() const {
+    Main_station::print();
+    cout << "transit track: " << endl;
+    for (Train *t: transit_track)
+        if (t)
+            t->print();
+        else
+            cout << "nullptr" << endl;
+    cout << "transit parking: ->" << endl;
+    for (Train *t: parcking1_transit)
+        t->print();
+    cout << "transit parking: <-" << endl;
+    for (Train *t: parcking2_transit)
+        t->print();
+}
 
-
+Local_station::~Local_station() {
+    for (int i = 0; i < TRANSIT_TRACK_LENGTH; ++i)
+        transit_track[i] = nullptr; //Non distruggo i puntatori di Train perchè può essere che servano a qualcun altro
+    parcking1_transit.clear(); //Clear pulisce solo la coda ma non distrugge i puntatori all'interno
+    parcking2_transit.clear();
+}
