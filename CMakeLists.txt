@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
-project(railway)
+project(untitled2)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(railway main.cpp)
+add_executable(untitled2 main.cpp time_table.cpp time_table.h)
