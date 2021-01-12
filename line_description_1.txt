@@ -1,0 +1,8 @@
+Stazione 0
+Stazione 1 1 40
+Stazione 2 1 80
+Stazione 3 0 130
+Stazione 4 1 150
+Stazione 5 0 220
+Stazione 6 0 240
+Stazione 7 1 300
