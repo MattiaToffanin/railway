@@ -42,7 +42,7 @@ void time_table ::avvia_Simulazione(){
 
 
             //Controlla se è a meno di 5 km dalla stazione
-            if (lista_Treni[j]->getDistance() > lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() - 5 && lista_Treni[j]->getDistance() < lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() && !lista_Treni[j]->isInStation()) {
+            if (lista_Treni[j]->getStatus()!=999 && lista_Treni[j]->getDistance() > lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() - 5 && lista_Treni[j]->getDistance() < lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() && !lista_Treni[j]->isInStation()) {
                 lista_Treni[j]->setDistance(lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() - 5); //c'è un piccolo spreco di tempo di masimo 2/3 minuti
                 lista_Treni[j]->setInStation(true);
 
@@ -126,17 +126,25 @@ void time_table ::avvia_Simulazione(){
                 }
             }
 
-            if (lista_Treni[j]->getDistance() >= lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance()+5){
-                lista_Treni[j]->incrementNextStation();
+            if (lista_Treni[j]->getDistance() >= lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance()+5) {
 
-                if (lista_Treni[j]->getType() == regionale->getType())
-                    lista_Treni[j]->changeSpeed(160);
-                else if (lista_Treni[j]->getType() == veloce->getType())
-                    lista_Treni[j]->changeSpeed(240);
-                else if (lista_Treni[j]->getType() == regionale->getType())
-                    lista_Treni[j]->changeSpeed(300);
+
+                if (lista_Treni[j]->getNextStation()+1 != lista_Stazioni.size()) {
+                    lista_Treni[j]->incrementNextStation();
+                    if (lista_Treni[j]->getType() == regionale->getType())
+                        lista_Treni[j]->changeSpeed(160);
+                    else if (lista_Treni[j]->getType() == veloce->getType())
+                        lista_Treni[j]->changeSpeed(240);
+                    else if (lista_Treni[j]->getType() == regionale->getType())
+                        lista_Treni[j]->changeSpeed(300);
+                }else{
+                    lista_Treni[j]->changeSpeed(0);
+                    lista_Treni[j]->setStatus(999);
+                    lista_Treni[j]->setDistance(lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance());
+                }
+
             }
-            cout<<lista_Treni[j]->getDistance()<<"-"<<lista_Treni[j]->getSpeed()<<" ";
+            cout<<i<<")"<<lista_Treni[j]->getDistance()<<"-"<<lista_Treni[j]->getSpeed()<<" ";
             lista_Treni[j]->setDistance(lista_Treni[j]->getDistance() + lista_Treni[j]->incrementDistance(lista_Treni[j]->getSpeed()));
             cout<<lista_Treni[j]->getDistance()<<"\n";
         }
