@@ -49,7 +49,7 @@ protected:
               distance{distance}, orari{orari}, wait{wait} {}
 
 protected:
-    static const int MAX_SPEED = 0;
+    virtual int MAX_SPEED() const = 0;
 
 public:
 
@@ -200,7 +200,7 @@ public:
             : Train(ID, toward, orari, speed, delay, firstStation, status, distance) {};
 
 private:
-    static const int MAX_SPEED = 160;//velocità massima raggiungibile dal treno regionale
+    int MAX_SPEED() const { return 160; };
 };
 
 /**
@@ -222,7 +222,7 @@ public:
             : Train(ID, toward, orari, speed, delay, firstStation, status, distance) {};
 
 private:
-    static const int MAX_SPEED = 240;//velocità massima raggiungibile dal treno ad alta velocità
+    int MAX_SPEED() const { return 240; };
 };
 
 /**
@@ -245,7 +245,8 @@ public:
             : Train(ID, toward, orari, speed, delay, firstStation, status, distance) {};
 
 private:
-    static const int MAX_SPEED = 300;//velocità massima raggiungibile dal treno ad alta velocità super
+    int MAX_SPEED() const { return 300; };
+
 };
 
 #endif //RAILWAY_Train_H

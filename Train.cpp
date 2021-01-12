@@ -4,7 +4,8 @@
 
 
 int Train::getSpeed() const {
-    if (speed < 0 || speed > MAX_SPEED)throw InvalidSpeed{};
+    if (speed < 0 || speed > MAX_SPEED())
+        throw InvalidSpeed{};
     return speed;
 }
 
@@ -26,7 +27,7 @@ void Train::addDelay(int currentDelay) {
 }
 
 void Train::changeSpeed(int differentSpeed) {
-    if (differentSpeed < 0 || differentSpeed > MAX_SPEED)//lancia l'eccezione se la velocità cambiata è invalida
+    if (differentSpeed < 0 || differentSpeed > MAX_SPEED())//lancia l'eccezione se la velocità cambiata è invalida
         throw InvalidSpeed{};
     speed = differentSpeed;
 }
