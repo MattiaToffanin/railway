@@ -45,7 +45,7 @@ protected:
      * @param status stato iniziale
      */
     explicit Train(int ID = 0, bool toward = true, const std::vector<int> &orari = {}, int speed = 0, int delay = 0,
-                   int firstStation = 0, int status = 100, int distance = 0, int wait = 0, bool inStation = false)
+                   int firstStation = 0, int status = 100, int distance = 0, int wait = -1, bool inStation = false)
             : ID{ID}, speed{speed}, delay{delay}, nextStation{firstStation}, status{status}, toward{toward},
               distance{distance}, orari{orari}, wait{wait}, in_station{inStation} {}
 
@@ -144,6 +144,12 @@ public:
      * @param wait il tempo di attesa
      */
     void setWait(int wait);
+
+    /**
+     * funzione che restituisce wait
+     * @return
+     */
+    int getWait() const;
 
     /**
      * funzione che decrementa il tempo di attesa

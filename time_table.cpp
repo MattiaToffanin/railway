@@ -39,8 +39,10 @@ void time_table ::avvia_Simulazione(){
                     lista_Treni[j]->changeSpeed(300);
             }
 
+
+
             //Controlla se è a meno di 5 km dalla stazione
-            if (lista_Treni[j]->getDistance() > lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() - 5 && !lista_Treni[j]->isInStation()) {
+            if (lista_Treni[j]->getDistance() > lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() - 5 && lista_Treni[j]->getDistance() < lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() && !lista_Treni[j]->isInStation()) {
                 lista_Treni[j]->setDistance(lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() - 5); //c'è un piccolo spreco di tempo di masimo 2/3 minuti
                 lista_Treni[j]->setInStation(true);
 
@@ -105,7 +107,7 @@ void time_table ::avvia_Simulazione(){
             //si ferma alla stazione per descesa e salita passeggeri
             if (lista_Treni[j]->isInStation()) {
                 //arriva in stazione
-                if (lista_Treni[j]->getDistance() >= lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() && lista_Treni[j]->getStatus() != 4 && lista_Treni[j]->getStatus() != 5) {
+                if (lista_Treni[j]->getDistance() >= lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() && lista_Treni[j]->getStatus() != 4 && lista_Treni[j]->getStatus() != 5 && lista_Treni[j]->getWait() < 0) {
                     lista_Treni[j]->setDistance(lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance());
                     lista_Treni[j]->changeSpeed(0);
                     lista_Treni[j]->setWait(5);
@@ -120,23 +122,26 @@ void time_table ::avvia_Simulazione(){
                     }
                     lista_Treni[j]->setStatus(100);
                     lista_Treni[j]->changeSpeed(80);
+                    lista_Treni[j]->setInStation(false);
                 }
             }
 
-            if (lista_Treni[j]->getDistance()>lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance()+5){
+            if (lista_Treni[j]->getDistance() >= lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance()+5){
                 lista_Treni[j]->incrementNextStation();
-                if (lista_Treni[j]->getType().compare(regionale->getType()))
+
+                if (lista_Treni[j]->getType() == regionale->getType())
                     lista_Treni[j]->changeSpeed(160);
-                else if (lista_Treni[j]->getType().compare(veloce->getType()))
+                else if (lista_Treni[j]->getType() == veloce->getType())
                     lista_Treni[j]->changeSpeed(240);
-                else if (lista_Treni[j]->getType().compare(regionale->getType()))
+                else if (lista_Treni[j]->getType() == regionale->getType())
                     lista_Treni[j]->changeSpeed(300);
             }
-
+            cout<<lista_Treni[j]->getDistance()<<"-"<<lista_Treni[j]->getSpeed()<<" ";
             lista_Treni[j]->setDistance(lista_Treni[j]->getDistance() + lista_Treni[j]->incrementDistance(lista_Treni[j]->getSpeed()));
+            cout<<lista_Treni[j]->getDistance()<<"\n";
         }
     }
-    Stampa();
+    //Stampa();
 }
 
 void time_table ::carica_TimeTable(){
@@ -297,7 +302,6 @@ void time_table ::carica_Tratta(){
     }
     tratta.close();
     ordina_Tratta();
-    Stampa();
 }
 
 vector<int> time_table::Orari(vector<string> treno) {

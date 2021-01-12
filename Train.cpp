@@ -93,6 +93,10 @@ void Train::setInStation(bool inStation) {
     in_station = inStation;
 }
 
+int Train::getWait() const {
+    return wait;
+}
+
 /*Train::~Train()
 {
 }*/
