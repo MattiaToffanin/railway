@@ -59,15 +59,17 @@ Train *Main_station::leave_train(int track) {
     if (track < 0 || track > 3) //Controllo se binario è compreso tra 0 e 3
         throw InvalidTrack{};
 
-    Train *ret = standard_track[track];
+    Train *ret = nullptr;
     standard_track[track] = nullptr; //Svuoto il binatio
     if (track < 2) { //Controllo se binario andata o ritorno
         if (!parcking1_stop.empty()) { //Controllo se parcheggio vuoto
+            ret = parcking1_stop.front();
             stop_train(parcking1_stop.front()); //Fermo un treno in parcheggio
             parcking1_stop.pop_front();
         }
     } else {
         if (!parcking2_stop.empty()) {
+            ret = parcking2_stop.front();
             stop_train(parcking2_stop.front());
             parcking2_stop.pop_front();
         }
@@ -149,18 +151,18 @@ Train *Local_station::leave_train(int track) {
     if (track == 4) {
         if (!transit_track[0])
             throw EmptyTrack{};
-        ret = transit_track[0];
         transit_track[0] = nullptr;
         if (!parcking1_transit.empty()) {
+            ret = parcking1_transit.front();
             stop_train(parcking1_transit.front());
             parcking1_transit.pop_front();
         }
     } else if (track == 5) { //Inutile ma va bene così
         if (!transit_track[1])
             throw EmptyTrack{};
-        ret = transit_track[1];
         transit_track[1] = nullptr;
         if (!parcking2_transit.empty()) {
+            ret = parcking2_transit.front();
             stop_train(parcking2_transit.front());
             parcking2_transit.pop_front();
         }

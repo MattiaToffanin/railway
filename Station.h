@@ -22,7 +22,7 @@ public:
     /**
      * Funzione membro che fa ripartire il treno dal binario inserito
      * @param track, il binario da liberare
-     * @return train che è partito
+     * @return train che era parcheggiato e ha occupato il binario appena svuotato
      */
     virtual Train *leave_train(int track) = 0;
 
@@ -125,7 +125,7 @@ public:
     /**
      * Funzione membro che fa ripartire il treno dal binario inserito
      * @param track, il binario da liberare
-     * @return train che è partito
+     * @return train che era parcheggiato e ha occupato il binario appena svuotato
      * */
     Train *leave_train(int track) override;
 
@@ -176,7 +176,7 @@ public:
     /**
      * Funzione membro che fa ripartire il treno dal binario inserito
      * @param track, il binario da liberare
-     * @return train che è partito
+     * @return train che era parcheggiato e ha occupato il binario appena svuotato
      */
     Train *leave_train(int track) override;
 
