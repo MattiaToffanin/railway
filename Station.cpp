@@ -101,7 +101,8 @@ Main_station::~Main_station() {
 
 
 int Local_station::get_free_binary(Train *t) {
-    if (t->getType() == "13RegionalTrain") //Controllo il tipo di treno
+    RegionalTrain regional_train_to_compare; //Oggetto treno regionale per vedere se treno passato è regionale
+    if (t->getType() == regional_train_to_compare.getType()) //Controllo il tipo di treno
         return Main_station::get_free_binary(t); //Se regionale allora è come se fosse una stazione principale
 
     if (t->getToward()) { //Se non regionale controlla il verso
@@ -116,7 +117,8 @@ int Local_station::get_free_binary(Train *t) {
 }
 
 int Local_station::stop_train(Train *t) {
-    if (t->getType() == "13RegionalTrain") //Controllo il tipo di treno
+    RegionalTrain regional_train_to_compare; //Oggetto treno regionale per vedere se treno passato è regionale
+    if (t->getType() == regional_train_to_compare.getType()) //Controllo il tipo di treno
         return Main_station::stop_train(t); //Se regionale allora è come se fosse una stazione principale
 
     switch (get_free_binary(t)) {

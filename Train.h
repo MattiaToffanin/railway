@@ -150,6 +150,9 @@ public:
     class InvalidSpeed {
     };
 
+    /**
+     * class che descrive un indice passato non valido
+     */
     class InvalidIndex {
     };
 

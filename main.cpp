@@ -31,13 +31,5 @@ int main() {
     s.leave_train(4);
 
     s.print();
-
-
-    cout << t1.getType();
-
-
-
-
-
     return 0;
 }
