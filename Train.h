@@ -146,6 +146,12 @@ public:
     void setWait(int wait);
 
     /**
+     * funzione che restituisce wait
+     * @return
+     */
+    int getWait() const;
+
+    /**
      * funzione che decrementa il tempo di attesa
      * @return true se attesa = 0, false altrimenti
      */
