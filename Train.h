@@ -1,8 +1,9 @@
-#include <string>
-#include <ostream>
-
 #ifndef RAILWAY_TRAIN_H
 #define RAILWAY_TRAIN_H
+
+#include <string>
+#include <ostream>
+#include <vector>
 
 /**
  * @author Collesei Matteo
@@ -29,6 +30,7 @@ private:
     int nextStation; //identificativo della stazione successiva
     int distance;
     static const int LIMIT_SPEED = 80; //limite di velocità nelle stazioni
+    std::vector<int> orari;
 
 protected:
     /**
@@ -40,8 +42,10 @@ protected:
      * @param firstStation id della prima stazione
      * @param status stato iniziale
      */
-    explicit Train(int ID = 0, bool toward = true, int speed = 0, int delay = 0, int firstStation = 0, int status = 0, int distance = 0)
-            : ID{ID}, speed{speed}, delay{delay}, nextStation{firstStation}, status{status}, toward{toward}, distance{distance} {}
+    explicit Train(int ID = 0, bool toward = true, const std::vector<int> &orari = {}, int speed = 0, int delay = 0,
+                   int firstStation = 0, int status = 0, int distance = 0)
+            : ID{ID}, speed{speed}, delay{delay}, nextStation{firstStation}, status{status}, toward{toward},
+              distance{distance}, orari{orari} {}
 
 protected:
     static const int MAX_SPEED = 0;
@@ -121,6 +125,9 @@ public:
      */
     int incrementDistance(int speed) const;
 
+    int getOrario(int i) const;
+
+
     /**
      * funzione che restituisce il tipo di treno
      * @return tipo di treno
@@ -143,6 +150,9 @@ public:
     class InvalidSpeed {
     };
 
+    class InvalidIndex {
+    };
+
 };
 
 /**
@@ -159,13 +169,15 @@ public:
      * @param firstStation id della prima stazione
      * @param status stato iniziale
      */
-    explicit RegionalTrain(int ID = 0, bool toward = true, int speed = 0, int delay = 0, int firstStation = 0,
+    explicit RegionalTrain(int ID = 0, bool toward = true, const std::vector<int> &orari = {}, int speed = 0,
+                           int delay = 0, int firstStation = 0,
                            int status = 0, int distance = 0)
-            : Train(ID, toward, speed, delay, firstStation, status, distance) {};
+            : Train(ID, toward, orari, speed, delay, firstStation, status, distance) {};
 
 private:
     static const int MAX_SPEED = 160;//velocità massima raggiungibile dal treno regionale
 };
+
 /**
  * classe che rappresenta un treno ad alta velocità
  */
@@ -180,9 +192,9 @@ public:
      * @param firstStation id della prima stazione
      * @param status stato iniziale
      */
-    explicit HighSpeedTrain(int ID = 0, bool toward = true, int speed = 0, int delay = 0, int firstStation = 0,
+    explicit HighSpeedTrain(int ID = 0, bool toward = true, const std::vector<int> & orari = {}, int speed = 0, int delay = 0, int firstStation = 0,
                             int status = 0, int distance = 0)
-            : Train(ID, toward, speed, delay, firstStation, status, distance) {};
+            : Train(ID, toward, orari, speed, delay, firstStation, status, distance) {};
 
 private:
     static const int MAX_SPEED = 240;//velocità massima raggiungibile dal treno ad alta velocità
@@ -202,9 +214,10 @@ public:
      * @param firstStation id della prima stazione
      * @param status stato iniziale
      */
-    explicit SuperHighSpeedTrain(int ID = 0, bool toward = true, int speed = 0, int delay = 0, int firstStation = 0,
+    explicit SuperHighSpeedTrain(int ID = 0, bool toward = true, const std::vector<int> &orari = {}, int speed = 0,
+                                 int delay = 0, int firstStation = 0,
                                  int status = 0, int distance = 0)
-            : Train(ID, toward, speed, delay, firstStation, status, distance) {};
+            : Train(ID, toward, orari, speed, delay, firstStation, status, distance) {};
 
 private:
     static const int MAX_SPEED = 300;//velocità massima raggiungibile dal treno ad alta velocità super

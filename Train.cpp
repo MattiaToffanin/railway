@@ -36,7 +36,7 @@ int Train::getId() const {
 }
 
 int Train::getNextStation() {
-    if(toward)return nextStation++;
+    if (toward)return nextStation++;
     return nextStation--;
 }
 
@@ -59,6 +59,13 @@ void Train::setDistance(int distance) {
 
 int Train::incrementDistance(int speed) const {
     return speed / 60;
+}
+
+int Train::getOrario(int i) const {
+    if (i < 0 || i >= orari.size())
+        throw InvalidIndex{};
+
+    return orari[i];
 }
 /*Train::~Train()
 {

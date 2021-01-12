@@ -71,6 +71,16 @@ public:
      */
     virtual ~Station();
 
+    /**
+     * Classe d'eccezione se il track passato non è valido
+     */
+    class InvalidTrack {};
+
+    /**
+     * Classe d'eccezione se il track cercato è vuoto
+     */
+    class EmptyTrack {};
+
 protected:
     /**
      * Costruttore parametrico

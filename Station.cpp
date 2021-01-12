@@ -53,8 +53,11 @@ int Main_station::stop_train(Train *t) {
 }
 
 Train *Main_station::leave_train(int track) {
-    if (!standard_track[track] || track < 0 || track > 3) //Controllo se binario è pieno o se è compreso tra 0 e 3
-        throw;
+    if (!standard_track[track] || track < 0 || track > 3) //Controllo se binario è pieno o
+        throw EmptyTrack{};
+
+    if (track < 0 || track > 3) //Controllo se binario è compreso tra 0 e 3
+        throw InvalidTrack{};
 
     Train *ret = standard_track[track];
     standard_track[track] = nullptr; //Svuoto il binatio
@@ -73,7 +76,8 @@ Train *Main_station::leave_train(int track) {
 }
 
 void Main_station::print() const {
-    cout << "type: " << get_type() << ", name: " << get_name() << ", id: " << get_id() << ", distance: " << get_distance() << endl << "standard tracks: "
+    cout << "type: " << get_type() << ", name: " << get_name() << ", id: " << get_id() << ", distance: "
+         << get_distance() << endl << "standard tracks: "
          << endl;
     for (Train *t: standard_track)
         if (t)
@@ -134,7 +138,7 @@ int Local_station::stop_train(Train *t) {
 
 Train *Local_station::leave_train(int track) {
     if (track < 0 || track > 5) //Controllo se binario è compreso tra 0 e 3
-        throw;
+        throw InvalidTrack{};
 
     if (track <= 3) //Controllo il tipo di binario
         return Main_station::leave_train(track); //Se standard è come se fosse una stazione principale
@@ -142,7 +146,7 @@ Train *Local_station::leave_train(int track) {
     Train *ret = nullptr;
     if (track == 4) {
         if (!transit_track[0])
-            throw;
+            throw EmptyTrack{};
         ret = transit_track[0];
         transit_track[0] = nullptr;
         if (!parcking1_transit.empty()) {
@@ -151,7 +155,7 @@ Train *Local_station::leave_train(int track) {
         }
     } else if (track == 5) { //Inutile ma va bene così
         if (!transit_track[1])
-            throw;
+            throw EmptyTrack{};
         ret = transit_track[1];
         transit_track[1] = nullptr;
         if (!parcking2_transit.empty()) {

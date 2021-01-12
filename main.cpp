@@ -33,6 +33,8 @@ int main() {
     s.print();
 
 
+    cout << t1.getType();
+
 
 
 
