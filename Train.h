@@ -44,7 +44,7 @@ protected:
      * @param status stato iniziale
      */
     explicit Train(int ID = 0, bool toward = true, const std::vector<int> &orari = {}, int speed = 0, int delay = 0,
-                   int firstStation = 0, int status = 0, int distance = 0, int wait = 0)
+                   int firstStation = 0, int status = 100, int distance = 0, int wait = 0)
             : ID{ID}, speed{speed}, delay{delay}, nextStation{firstStation}, status{status}, toward{toward},
               distance{distance}, orari{orari}, wait{wait} {}
 
@@ -196,7 +196,7 @@ public:
      */
     explicit RegionalTrain(int ID = 0, bool toward = true, const std::vector<int> &orari = {}, int speed = 0,
                            int delay = 0, int firstStation = 0,
-                           int status = 0, int distance = 0)
+                           int status = 100, int distance = 0)
             : Train(ID, toward, orari, speed, delay, firstStation, status, distance) {};
 
 private:
@@ -218,7 +218,7 @@ public:
      * @param status stato iniziale
      */
     explicit HighSpeedTrain(int ID = 0, bool toward = true, const std::vector<int> & orari = {}, int speed = 0, int delay = 0, int firstStation = 0,
-                            int status = 0, int distance = 0)
+                            int status = 100, int distance = 0)
             : Train(ID, toward, orari, speed, delay, firstStation, status, distance) {};
 
 private:
@@ -241,7 +241,7 @@ public:
      */
     explicit SuperHighSpeedTrain(int ID = 0, bool toward = true, const std::vector<int> &orari = {}, int speed = 0,
                                  int delay = 0, int firstStation = 0,
-                                 int status = 0, int distance = 0)
+                                 int status = 100, int distance = 0)
             : Train(ID, toward, orari, speed, delay, firstStation, status, distance) {};
 
 private:
