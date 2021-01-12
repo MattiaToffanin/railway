@@ -29,7 +29,8 @@ int Main_station::get_free_binary(Train *t) {
 }
 
 int Main_station::stop_train(Train *t) {
-    switch (get_free_binary(t)) {
+    int temp = get_free_binary(t);
+    switch (temp) {
         case -2:
             parcking2_stop.push_back(t);
             break;
@@ -49,7 +50,7 @@ int Main_station::stop_train(Train *t) {
             standard_track[3] = t;
             break;
     }
-    return get_free_binary(t);
+    return temp;
 }
 
 Train *Main_station::leave_train(int track) {
@@ -123,7 +124,8 @@ int Local_station::stop_train(Train *t) {
     if (t->getType() == regional_train_to_compare.getType()) //Controllo il tipo di treno
         return Main_station::stop_train(t); //Se regionale allora è come se fosse una stazione principale
 
-    switch (get_free_binary(t)) {
+    int temp = get_free_binary(t);
+    switch (temp) {
         case -5:
             parcking2_transit.push_back(t);
             break;
@@ -137,7 +139,7 @@ int Local_station::stop_train(Train *t) {
             transit_track[1] = t;
             break;
     }
-    return get_free_binary(t);
+    return temp;
 }
 
 Train *Local_station::leave_train(int track) {
