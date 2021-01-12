@@ -92,7 +92,12 @@ public:
      * funione che restituisce l'identificativo della stazione successiva
      * @return id della stazione successiva
      */
-    int getNextStation();
+    int getNextStation() const;
+
+    /**
+     * funzione che incrementa la prossiam stazione in base al verso del treno
+     */
+    void incrementNextStation();
 
     /**
      * funzione che restituisce lo stato del treno
@@ -125,6 +130,11 @@ public:
      */
     int incrementDistance(int speed) const;
 
+    /**
+     * funzione che restituisce l'orario in base all'indice passato
+     * @param i, l'indice
+     * @return l'orario corrispondente
+     */
     int getOrario(int i) const;
 
 

@@ -35,9 +35,16 @@ int Train::getId() const {
     return ID;
 }
 
-int Train::getNextStation() {
-    if (toward)return nextStation++;
-    return nextStation--;
+int Train::getNextStation() const {
+    return nextStation;
+}
+
+
+void Train::incrementNextStation() {
+    if (toward)
+        nextStation++;
+    else
+        nextStation--;
 }
 
 bool Train::getToward() const {
@@ -67,6 +74,7 @@ int Train::getOrario(int i) const {
 
     return orari[i];
 }
+
 /*Train::~Train()
 {
 }*/
