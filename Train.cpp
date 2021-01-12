@@ -75,6 +75,15 @@ int Train::getOrario(int i) const {
     return orari[i];
 }
 
+void Train::setWait(int wait) {
+    Train::wait = wait;
+}
+
+bool Train::decrementWait() {
+    wait--;
+    return wait == 0;
+}
+
 /*Train::~Train()
 {
 }*/
