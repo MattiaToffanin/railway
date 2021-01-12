@@ -26,7 +26,7 @@ void Train::addDelay(int currentDelay) {
 }
 
 void Train::changeSpeed(int differentSpeed) {
-    if (differentSpeed < 0 || differentSpeed > MAX_SPEED)
+    if (differentSpeed < 0 || differentSpeed > MAX_SPEED)//lancia l'eccezione se la velocità cambiata è invalida
         throw InvalidSpeed{};
     speed = differentSpeed;
 }
@@ -36,7 +36,8 @@ int Train::getId() const {
 }
 
 int Train::getNextStation() {
-    return nextStation++;
+    if(toward)return nextStation++;
+    return nextStation--;
 }
 
 bool Train::getToward() const {
@@ -45,7 +46,9 @@ bool Train::getToward() const {
 
 void Train::print() const {
     std::cout << "ID: " << ID << " speed: " << speed << " delay: " << delay << " toward: " << toward
-       << " status: " << status << " nextStation: " << nextStation << std::endl;
+              << " status: " << status << " nextStation: " << nextStation << std::endl;
 }
-
+/*Train::~Train()
+{
+}*/
 
