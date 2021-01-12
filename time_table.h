@@ -1,5 +1,5 @@
 //
-// Creato e modificato da Tommaso Bicego
+// Creato e modificato da Tommaso Bicego, 1190444
 //
 
 #ifndef ASSEGNAMENTO2_0_TIME_TABLE_H
@@ -31,9 +31,11 @@ public:
     vector<string> controlla_TimeTable(string text);
     void ordina_Tratta();
     vector<string> split(string text);
+    vector<int> Orari(vector<string>);
 
 private:
     vector<Station*> lista_Stazioni;
+    vector<Station*> lista_MainS;
     vector<Train*> lista_Treni;
 
 

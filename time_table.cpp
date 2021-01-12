@@ -1,5 +1,5 @@
 //
-// Creato e modificato da Tommaso Bicego
+// Creato e modificato da Tommaso Bicego, 1190444
 //
 
 #include "time_table.h"
@@ -19,9 +19,124 @@ time_table::time_table() {
 }
 
 void time_table ::avvia_Simulazione(){
-    for (int i = 0; i < 1440; ++i) {
 
+    Train* regionale=new RegionalTrain();
+    Train* veloce=new HighSpeedTrain();
+    Train* moltoveloce=new SuperHighSpeedTrain();
+
+    for (int i = 0; i < 1440; ++i) {
+        for (int j = 0; j < lista_Treni.size(); ++j) {
+
+
+            //parte il treno
+            if (i == lista_Treni[j]->getOrario(0)) {
+                lista_Treni[j]->incrementNextStation();
+                if (lista_Treni[j]->getType() == regionale->getType())
+                    lista_Treni[j]->changeSpeed(160);
+                else if (lista_Treni[j]->getType() == veloce->getType())
+                    lista_Treni[j]->changeSpeed(240);
+                else if (lista_Treni[j]->getType() == regionale->getType())
+                    lista_Treni[j]->changeSpeed(300);
+            }
+
+            //Controlla se è a meno di 5 km dalla stazione
+            if (lista_Treni[j]->getDistance() > lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() - 5 && !lista_Treni[j]->isInStation()) {
+                lista_Treni[j]->setDistance(lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() - 5); //c'è un piccolo spreco di tempo di masimo 2/3 minuti
+                lista_Treni[j]->setInStation(true);
+
+                int status=lista_Stazioni[lista_Treni[j]->getNextStation()]->stop_train(lista_Treni[j]);
+                cout<<"il treno "<<lista_Treni[j]->getId()<<" sta per arrivare alla stazione "<<lista_Stazioni[lista_Treni[j]->getNextStation()]->get_name()<<"\n";
+
+                switch (status) {
+                    case -5:
+                        lista_Treni[j]->setStatus(status);
+                        lista_Treni[j]->changeSpeed(0);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si ferma nel parcheggio transito ritorno \n";
+                        break;
+                    case -4:
+                        lista_Treni[j]->setStatus(status);
+                        lista_Treni[j]->changeSpeed(0);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si ferma nel parcheggio transito andata \n";
+                        break;
+                    case -2:
+                        lista_Treni[j]->setStatus(status);
+                        lista_Treni[j]->changeSpeed(0);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si ferma nel parcheggio stop ritorno \n";
+                        break;
+                    case -1:
+                        lista_Treni[j]->setStatus(status);
+                        lista_Treni[j]->changeSpeed(0);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si ferma nel parcheggio stop andata \n";
+                        break;
+                    case 0:
+                        lista_Treni[j]->setStatus(status);
+                        lista_Treni[j]->changeSpeed(80);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si dirige verso binari stop di andata 1 \n";
+                        break;
+                    case 1:
+                        lista_Treni[j]->setStatus(status);
+                        lista_Treni[j]->changeSpeed(80);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si dirige verso binari stop di andata 2 \n";
+                        break;
+                    case 2:
+                        lista_Treni[j]->setStatus(status);
+                        lista_Treni[j]->changeSpeed(80);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si dirige verso binari stop di ritorno 1 \n";
+                        break;
+                    case 3:
+                        lista_Treni[j]->setStatus(status);
+                        lista_Treni[j]->changeSpeed(80);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si dirige verso binari stop di ritorno 2 \n";
+                        break;
+                    case 4:
+                        lista_Treni[j]->setStatus(status);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si dirige verso binario transito andata \n";
+                        break;
+                    case 5:
+                        lista_Treni[j]->setStatus(status);
+                        cout<<"il treno "<<lista_Treni[j]->getId()<<" si dirige verso binario transito ritorno \n";
+                        break;
+                    case 100:
+                        //non dovrebbe uscire
+                        break;
+                }
+
+            }
+            //si ferma alla stazione per descesa e salita passeggeri
+            if (lista_Treni[j]->isInStation()) {
+                //arriva in stazione
+                if (lista_Treni[j]->getDistance() >= lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() && lista_Treni[j]->getStatus() != 4 && lista_Treni[j]->getStatus() != 5) {
+                    lista_Treni[j]->setDistance(lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance());
+                    lista_Treni[j]->changeSpeed(0);
+                    lista_Treni[j]->setWait(5);
+                }
+                //riparte dalla stazione
+                if(lista_Treni[j]->getDistance() == lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance() && lista_Treni[j]->decrementWait()){
+
+                    Train* temp =lista_Stazioni[lista_Treni[j]->getNextStation()]->leave_train(lista_Treni[j]->getStatus());
+                    if (temp) {
+                        temp->setStatus(lista_Treni[j]->getStatus());
+                        temp->changeSpeed(80);
+                    }
+                    lista_Treni[j]->setStatus(100);
+                    lista_Treni[j]->changeSpeed(80);
+                }
+            }
+
+            if (lista_Treni[j]->getDistance()>lista_Stazioni[lista_Treni[j]->getNextStation()]->get_distance()+5){
+                lista_Treni[j]->incrementNextStation();
+                if (lista_Treni[j]->getType().compare(regionale->getType()))
+                    lista_Treni[j]->changeSpeed(160);
+                else if (lista_Treni[j]->getType().compare(veloce->getType()))
+                    lista_Treni[j]->changeSpeed(240);
+                else if (lista_Treni[j]->getType().compare(regionale->getType()))
+                    lista_Treni[j]->changeSpeed(300);
+            }
+
+            lista_Treni[j]->setDistance(lista_Treni[j]->getDistance() + lista_Treni[j]->incrementDistance(lista_Treni[j]->getSpeed()));
+        }
     }
+    Stampa();
 }
 
 void time_table ::carica_TimeTable(){
@@ -36,6 +151,8 @@ void time_table ::carica_TimeTable(){
 
             Train* treno;
 
+            vector<int> orario = Orari(tratta);
+
             int id = stoi(tratta[0]);
 
             bool toward = true;
@@ -43,13 +160,13 @@ void time_table ::carica_TimeTable(){
                 toward = false;
 
             if (stoi(tratta[2])==1){
-                treno=new RegionalTrain(id,toward);
+                treno=new RegionalTrain(id,toward, orario);
             }
             else if (stoi(tratta[2])==2){
-                treno = new HighSpeedTrain(id,toward);
+                treno = new HighSpeedTrain(id,toward,orario);
             }
             else if (stoi(tratta[2])==3){
-                treno = new SuperHighSpeedTrain(id,toward);
+                treno = new SuperHighSpeedTrain(id,toward,orario);
             }
             else{
                 //errore
@@ -59,6 +176,7 @@ void time_table ::carica_TimeTable(){
     }
     timetables.close();
 }
+
 
 void time_table::ordina_Tratta() {
 
@@ -81,14 +199,14 @@ void time_table::ordina_Tratta() {
 vector<string> time_table::controlla_TimeTable(string text) {
 
     vector<string> orari_treno = split(text);
-    vector<Station*> temp_main;
     for (int i = 0; i < lista_Stazioni.size(); ++i) {
         if(lista_Stazioni[i]->get_type().compare("class Main_station")){
-            temp_main.push_back(lista_Stazioni[i]);
+            lista_MainS.push_back(lista_Stazioni[i]);
         }
     }
 
     int tipoT = stoi(orari_treno[1]);
+
     for (int i = 3; i < orari_treno.size()-1; ++i) {
         int tempo=(stoi(orari_treno[i])-stoi(orari_treno[i+1]));
 
@@ -109,7 +227,7 @@ vector<string> time_table::controlla_TimeTable(string text) {
                 }
                 break;
             case 2:
-                distanza_stazioni = temp_main[i+1]->get_distance() - temp_main[i]->get_distance();
+                distanza_stazioni = lista_MainS[i+1]->get_distance() - lista_MainS[i]->get_distance();
                 distanza_stazioni =(distanza_stazioni-10)*60;
                 if (distanza_stazioni<0)
                     distanza_stazioni = - distanza_stazioni;
@@ -120,7 +238,7 @@ vector<string> time_table::controlla_TimeTable(string text) {
                 }
                 break;
             case 3:
-                distanza_stazioni = temp_main[i+1]->get_distance() - temp_main[i]->get_distance();
+                distanza_stazioni = lista_MainS[i+1]->get_distance() - lista_MainS[i]->get_distance();
                 distanza_stazioni =(distanza_stazioni-10)*60;
                 if (distanza_stazioni<0)
                     distanza_stazioni = - distanza_stazioni;
@@ -131,8 +249,8 @@ vector<string> time_table::controlla_TimeTable(string text) {
                 }
                 break;
         }
-        return orari_treno;
     }
+    return orari_treno;
 }
 
 
@@ -182,6 +300,15 @@ void time_table ::carica_Tratta(){
     Stampa();
 }
 
+vector<int> time_table::Orari(vector<string> treno) {
+    vector<int> orario;
+    for (int i = 3; i < treno.size(); ++i) {
+        cout<<treno[i]<<"\n";
+        orario.push_back(stoi(treno[i]));
+    }
+    return orario;
+}
+
 vector<string> time_table::split(string text) {
     string temp;
     vector<string> utility;
@@ -204,6 +331,8 @@ void time_table::Stampa(){
         string nome = lista_Stazioni[i]->get_name();
         int distanza = lista_Stazioni[i]->get_distance();
 
-        cout<<nome<<" "<< distanza<<'\n';
+        lista_Stazioni[i]->print();
+
+        cout<<"--------------------------------"<<'\n';
     }
 }
