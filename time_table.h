@@ -2,8 +2,11 @@
 // Creato e modificato da Tommaso Bicego
 //
 
-#ifndef UNTITLED2_TIME_TABLE_H
-#define UNTITLED2_TIME_TABLE_H
+#ifndef ASSEGNAMENTO2_0_TIME_TABLE_H
+#define ASSEGNAMENTO2_0_TIME_TABLE_H
+
+#include "Station.h"
+#include "Train.h"
 
 #include "vector"
 #include <iostream>
@@ -15,14 +18,30 @@ using namespace std;
 class time_table {
 public:
     time_table();
+
+    time_table(const vector<Station *> &listaStazioni);
+
     void avvia_Simulazione();
 
-private:
+
+    //da spostare a private
     void carica_Tratta();
     void carica_TimeTable();
-    vector<string> controlla_Tratta(vector<string>);
+    vector<string> controlla_Tratta(string text);
+    vector<string> controlla_TimeTable(string text);
+    void ordina_Tratta();
     vector<string> split(string text);
+
+private:
+    vector<Station*> lista_Stazioni;
+    vector<Train*> lista_Treni;
+
+
+    //per test
+    void Stampa();
+
+
 };
 
 
-#endif //UNTITLED2_TIME_TABLE_H
+#endif //ASSEGNAMENTO2_0_TIME_TABLE_H
