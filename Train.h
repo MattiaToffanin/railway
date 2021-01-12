@@ -30,6 +30,7 @@ private:
     int nextStation; //identificativo della stazione successiva
     int distance;
     int wait;
+    bool in_station;
     static const int LIMIT_SPEED = 80; //limite di velocità nelle stazioni
     std::vector<int> orari;
 
@@ -44,9 +45,9 @@ protected:
      * @param status stato iniziale
      */
     explicit Train(int ID = 0, bool toward = true, const std::vector<int> &orari = {}, int speed = 0, int delay = 0,
-                   int firstStation = 0, int status = 100, int distance = 0, int wait = 0)
+                   int firstStation = 0, int status = 100, int distance = 0, int wait = 0, bool inStation = false)
             : ID{ID}, speed{speed}, delay{delay}, nextStation{firstStation}, status{status}, toward{toward},
-              distance{distance}, orari{orari}, wait{wait} {}
+              distance{distance}, orari{orari}, wait{wait}, in_station{inStation} {}
 
 protected:
     virtual int MAX_SPEED() const = 0;
@@ -149,6 +150,18 @@ public:
      * @return true se attesa = 0, false altrimenti
      */
     bool decrementWait();
+
+    /**
+     * funzione che restituisce true se il treno è in stazione, false altrimenti
+     * @return true se il treno è in stazione, false altrimenti
+     */
+    bool isInStation() const;
+
+    /**
+     * funzione che modifica se il treno è in stazione o no
+     * @param inStation
+     */
+    void setInStation(bool inStation);
 
     /**
      * funzione che restituisce il tipo di treno

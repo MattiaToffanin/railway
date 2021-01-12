@@ -85,6 +85,14 @@ bool Train::decrementWait() {
     return wait == 0;
 }
 
+bool Train::isInStation() const {
+    return in_station;
+}
+
+void Train::setInStation(bool inStation) {
+    in_station = inStation;
+}
+
 /*Train::~Train()
 {
 }*/
