@@ -26,17 +26,23 @@ public:
 
     //da spostare a private
     void carica_Tratta();
+
     void carica_TimeTable();
+
     vector<string> controlla_Tratta(string text);
+
     vector<string> controlla_TimeTable(string text);
+
     void ordina_Tratta();
+
     vector<string> split(string text);
+
     vector<int> Orari(vector<string>);
 
 private:
-    vector<Station*> lista_Stazioni;
-    vector<Station*> lista_MainS;
-    vector<Train*> lista_Treni;
+    vector<Station *> lista_Stazioni;
+    vector<Station *> lista_MainS;
+    vector<Train *> lista_Treni;
 
 
     //per test

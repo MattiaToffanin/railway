@@ -54,7 +54,7 @@ int Main_station::stop_train(Train *t) {
 }
 
 Train *Main_station::leave_train(int track) {
-    if (!standard_track[track] || track < 0 || track > 3) //Controllo se binario è pieno o
+    if (!standard_track[track]) //Controllo se binario è pieno o
         throw EmptyTrack{};
 
     if (track < 0 || track > 3) //Controllo se binario è compreso tra 0 e 3

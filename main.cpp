@@ -8,14 +8,13 @@
 #include "string"
 #include <iostream>
 #include <fstream>
+
 using namespace std;
 
-int main () {
+int main() {
 
-    time_table* t = new time_table();
+    time_table *t = new time_table();
     t->avvia_Simulazione();
-
-
 
 
     return 0;
