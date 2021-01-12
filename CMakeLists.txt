@@ -3,4 +3,4 @@ project(railway)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(railway main.cpp Station.cpp Station.h Train.cpp Train.h)
+add_executable(railway main.cpp Station.cpp Station.h Train.cpp Train.h time_table.h time_table.cpp)
