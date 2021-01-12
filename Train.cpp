@@ -48,6 +48,18 @@ void Train::print() const {
     std::cout << "ID: " << ID << " speed: " << speed << " delay: " << delay << " toward: " << toward
               << " status: " << status << " nextStation: " << nextStation << std::endl;
 }
+
+int Train::getDistance() const {
+    return distance;
+}
+
+void Train::setDistance(int distance) {
+    Train::distance = distance;
+}
+
+int Train::incrementDistance(int speed) const {
+    return speed / 60;
+}
 /*Train::~Train()
 {
 }*/
